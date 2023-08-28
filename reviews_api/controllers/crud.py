@@ -1,5 +1,6 @@
 from reviews_api.database.database import Database
 
+
 class ReviewController:
     def __init__(self, database: Database):
         self.database = database

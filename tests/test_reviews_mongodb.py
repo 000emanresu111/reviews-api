@@ -1,24 +1,26 @@
-from fastapi.testclient import TestClient
-from reviews_api.routes.routes import router
-from reviews_api.controllers.crud import ReviewController
-from reviews_api.models.schemas import RestaurantReview, ReviewInfo, RestaurantInfo, ReviewSentiment
-from unittest.mock import patch, MagicMock
-from reviews_api.database.database import Database
-import pytest
 import json
 from enum import Enum
+from unittest.mock import MagicMock, patch
+
+import pytest
+from fastapi.testclient import TestClient
+
+from reviews_api.controllers.crud import ReviewController
+from reviews_api.models.schemas import (
+    RestaurantInfo,
+    RestaurantReview,
+    ReviewInfo,
+    ReviewSentiment,
+)
+from reviews_api.routes.routes import router
 
 client = TestClient(router)
 
-class EnumEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, Enum):
-            return obj.value
-        return super().default(obj)
-    
+
 @pytest.fixture
 def mock_controller():
     return MagicMock(spec=ReviewController)
+
 
 def test_add_review(mock_controller):
     review_data = ReviewInfo(
@@ -37,8 +39,9 @@ def test_add_review(mock_controller):
     restaurant_review = RestaurantReview(restaurant=restaurant_data, review=review_data)
     print(restaurant_review.json())
 
-
-    with patch("reviews_api.controllers.crud.ReviewController", return_value=mock_controller):
+    with patch(
+        "reviews_api.controllers.crud.ReviewController", return_value=mock_controller
+    ):
         mock_controller_instance = mock_controller.return_value
         mock_controller_instance.add_review.return_value = restaurant_review
 

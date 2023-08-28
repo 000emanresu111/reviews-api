@@ -1,7 +1,8 @@
-from pydantic import BaseModel, Field, PositiveFloat, validator
-from typing import Union
-from enum import Enum
 from datetime import datetime
+from enum import Enum
+from typing import Union
+
+from pydantic import BaseModel, Field, PositiveFloat, validator
 
 
 class ReviewSentiment(str, Enum):

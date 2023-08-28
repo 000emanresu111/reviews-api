@@ -1,9 +1,10 @@
+from datetime import datetime
+from typing import List
+
 from pymongo import MongoClient
 from pymongo.collection import Collection
-from typing import List
-from reviews_api.models.schemas import ReviewInfo, ReviewSentiment
-from datetime import datetime
-from fastapi import FastAPI, Depends
+
+from reviews_api.models.schemas import ReviewInfo
 
 
 class DatabaseSettings:

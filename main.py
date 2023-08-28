@@ -1,10 +1,7 @@
-from fastapi import FastAPI, Depends
-from reviews_api.models.schemas import RestaurantReview
-from reviews_api.controllers.crud import ReviewController
-from reviews_api.database.database import Database, get_database
-from reviews_api.routes.routes import router
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from reviews_api.routes.routes import router
 
 app = FastAPI()
 
