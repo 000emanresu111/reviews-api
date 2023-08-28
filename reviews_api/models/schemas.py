@@ -4,10 +4,10 @@ from enum import Enum
 from datetime import datetime
 
 
-class ReviewSentiment(Enum):
-    NEGATIVE = 0
-    POSITIVE = 1
-    NONE = None
+class ReviewSentiment(str, Enum):
+    NEGATIVE = "0"
+    POSITIVE = "1"
+    NONE = "None"
 
 
 class RestaurantInfo(BaseModel):

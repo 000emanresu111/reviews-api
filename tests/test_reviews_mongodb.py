@@ -35,7 +35,7 @@ def test_add_review(mock_controller):
     )
 
     restaurant_review = RestaurantReview(restaurant=restaurant_data, review=review_data)
-    print(restaurant_review.dict())
+    print(restaurant_review.json())
 
 
     with patch("reviews_api.controllers.crud.ReviewController", return_value=mock_controller):
@@ -44,8 +44,9 @@ def test_add_review(mock_controller):
 
         response = client.post(
             "/reviews/add-review",
-            json={"review": restaurant_review.dict()},
-            data=json.dumps({"review": restaurant_review.dict()}, cls=EnumEncoder),
+            json=restaurant_review.json(),
+            content=json.dumps(restaurant_review.dict()),
+            headers={"Content-Type": "application/json"},
         )
 
         print("response", response.json())
