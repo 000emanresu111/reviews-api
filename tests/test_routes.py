@@ -15,8 +15,6 @@ from reviews_api.models.schemas import (
 )
 from reviews_api.routes.routes import router
 
-from reviews_api.models.schemas import ReviewSentimentValidator
-from reviews_api.middlewares.error_handler import ValidationError
 
 client = TestClient(router)
 

@@ -34,5 +34,5 @@ class ErrorHandlerMiddleware(BaseHTTPMiddleware):
         except Exception as e:
             return JSONResponse(
                 status_code=500,
-                content={"message": "An internal server error occurred."},
+                content={"message": f"An internal server error occurred. - {str(e)}"},
             )

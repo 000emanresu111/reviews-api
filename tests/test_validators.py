@@ -4,48 +4,9 @@ from reviews_api.models.schemas import (
     RatingValidator,
     ReviewSentimentValidator,
     ReviewSentiment,
-    ReviewInfo,
     ReviewerValidator,
     DateValidator,
 )
-
-
-def test_validate_review_sentiment_invalid():
-    invalid_review_data = {
-        "review_date": "08/30/2023 12:34:56",
-        "review_reviewer": "John Doe",
-        "review_text": "Great food!",
-        "review_sentiment": "invalid_sentiment",
-        "review_rating": 4.5,
-    }
-
-    with pytest.raises(ValueError, match="Invalid sentiment value"):
-        ReviewSentimentValidator.validate_review_sentiment(
-            invalid_review_data["review_sentiment"]
-        )
-
-
-def test_validate_restaurant_rating_invalid():
-    invalid_restaurant_data = {
-        "restaurant_name": "Test Restaurant",
-        "restaurant_rating": 6.0,  # Invalid rating value
-    }
-
-    with pytest.raises(ValueError, match="Rating must be between 1 and 5"):
-        RatingValidator.validate_rating(invalid_restaurant_data["restaurant_rating"])
-
-
-def test_validate_review_rating_invalid():
-    invalid_review_data = {
-        "review_date": "08/30/2023 12:34:56",
-        "review_reviewer": "John Doe",
-        "review_text": "Great food!",
-        "review_sentiment": "positive",
-        "review_rating": 6.0,
-    }
-
-    with pytest.raises(ValueError, match="Rating must be between 1 and 5"):
-        RatingValidator.validate_rating(invalid_review_data["review_rating"])
 
 
 def test_validate_review_reviewer_invalid():

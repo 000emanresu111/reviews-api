@@ -1,8 +1,4 @@
-from unittest.mock import Mock, patch
-from reviews_api.scraper.scraping_service import scrape_justeat_reviews, WEBDRIVER_PATH
-
-
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 from reviews_api.scraper.scraping_service import scrape_justeat_reviews
 
 
