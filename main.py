@@ -7,7 +7,7 @@ from reviews_api.routes.routes import router
 
 app = FastAPI()
 
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"]) 
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
 app.add_middleware(ErrorHandlerMiddleware)
 
 app.add_middleware(

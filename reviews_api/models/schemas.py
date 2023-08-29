@@ -38,14 +38,6 @@ class RestaurantReview(BaseModel):
     review: ReviewInfo
 
 
-class RestaurantNameValidator:
-    @validator("restaurant_name", pre=True)
-    def validate_restaurant_name(cls, value):
-        if not value.replace(" ", "").isalpha():
-            raise ValueError("Restaurant name should contain only letters and spaces")
-        return value.strip()
-
-
 class RatingValidator:
     @validator("restaurant_rating", "review_rating", pre=True)
     def validate_rating(cls, value):

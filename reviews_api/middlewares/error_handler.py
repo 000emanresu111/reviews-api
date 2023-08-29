@@ -4,6 +4,7 @@ from pydantic import ValidationError
 from reviews_api.utils.exceptions import DatabaseError
 from starlette.middleware.base import BaseHTTPMiddleware
 
+
 class ErrorHandlerMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         try:
@@ -23,7 +24,9 @@ class ErrorHandlerMiddleware(BaseHTTPMiddleware):
             errors = e.errors()
             error_messages = []
             for error in errors:
-                error_messages.append({"field": error["loc"][2], "message": error["msg"]})
+                error_messages.append(
+                    {"field": error["loc"][2], "message": error["msg"]}
+                )
             return JSONResponse(
                 status_code=422,
                 content={"message": "Validation error", "errors": error_messages},

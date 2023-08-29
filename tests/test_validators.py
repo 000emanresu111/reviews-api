@@ -5,7 +5,6 @@ from reviews_api.models.schemas import (
     ReviewSentimentValidator,
     ReviewSentiment,
     ReviewInfo,
-    RestaurantNameValidator,
     ReviewerValidator,
     DateValidator,
 )
@@ -47,16 +46,6 @@ def test_validate_review_rating_invalid():
 
     with pytest.raises(ValueError, match="Rating must be between 1 and 5"):
         RatingValidator.validate_rating(invalid_review_data["review_rating"])
-
-
-def test_validate_restaurant_name_invalid():
-    invalid_data = {"restaurant_name": "123 Restaurant"}
-    with pytest.raises(
-        ValueError, match="Restaurant name should contain only letters and spaces"
-    ):
-        RestaurantNameValidator.validate_restaurant_name(
-            invalid_data["restaurant_name"]
-        )
 
 
 def test_validate_review_reviewer_invalid():
