@@ -28,4 +28,7 @@ async def add_review(
 
 @router.get("/reviews/fetch-reviews")
 async def fetch_reviews(controller: ReviewController = Depends(get_controller)):
-    return controller.fetch_reviews()
+    try:
+        return controller.fetch_reviews()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

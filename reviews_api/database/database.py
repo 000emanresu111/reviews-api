@@ -4,11 +4,11 @@ from typing import List
 from pymongo import MongoClient
 from pymongo.collection import Collection
 
-from reviews_api.models.schemas import ReviewInfo
+from reviews_api.models.schemas import RestaurantReview
 
 
 class DatabaseSettings:
-    DB_NAME = "restaurant_reviews"
+    DB_NAME = "restaurant_reviews_db"
     COLLECTION_NAME = "reviews"
 
 
@@ -23,15 +23,15 @@ class Database:
     def __init__(self, connection: DatabaseConnection):
         self.connection = connection
 
-    def add_review(self, review: ReviewInfo) -> ReviewInfo:
+    def add_review(self, review: RestaurantReview) -> RestaurantReview:
         review_dict = review.dict()
         review_dict["review_date"] = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
         self.connection.collection.insert_one(review_dict)
         return review
 
-    def fetch_reviews(self) -> List[ReviewInfo]:
+    def fetch_reviews(self) -> List[RestaurantReview]:
         reviews = self.connection.collection.find()
-        return [ReviewInfo(**review) for review in reviews]
+        return [RestaurantReview(**review) for review in reviews]
 
 
 def get_database():

@@ -1,5 +1,4 @@
 import json
-from enum import Enum
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -56,3 +55,34 @@ def test_add_review(mock_controller):
 
         assert response.status_code == 200
         assert response.json() == restaurant_review.dict()
+
+
+def test_fetch_reviews(mock_controller):
+    review_data = ReviewInfo(
+        review_date="08/30/2023 12:34:56",
+        review_reviewer="John Doe",
+        review_text="Great food!",
+        review_sentiment="1",
+        review_rating=4.5,
+    )
+
+    restaurant_data = RestaurantInfo(
+        restaurant_name="Test Restaurant",
+        restaurant_rating=4.5,
+    )
+
+    restaurant_review = RestaurantReview(restaurant=restaurant_data, review=review_data)
+    print(restaurant_review.json())
+
+    with patch(
+        "reviews_api.controllers.crud.ReviewController", return_value=mock_controller
+    ):
+        mock_controller_instance = mock_controller.return_value
+        mock_controller_instance.fetch_reviews.return_value = [restaurant_review]
+
+        response = client.get("/reviews/fetch-reviews")
+
+        print("response", response.json())
+
+        assert response.status_code == 200
+        assert response.json() == [restaurant_review.dict()]
