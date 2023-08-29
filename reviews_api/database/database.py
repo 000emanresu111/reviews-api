@@ -1,10 +1,9 @@
 from datetime import datetime
 from typing import List
-
 from pymongo import MongoClient
 from pymongo.collection import Collection
-
 from reviews_api.models.schemas import RestaurantReview
+from bson import ObjectId
 
 
 class DatabaseSettings:
@@ -25,7 +24,8 @@ class Database:
 
     def add_review(self, review: RestaurantReview) -> RestaurantReview:
         review_dict = review.dict()
-        review_dict["review_date"] = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
+        review_dict["review_date"] = datetime.now()
+        review_dict["_id"] = ObjectId()
         self.connection.collection.insert_one(review_dict)
         return review
 
@@ -34,6 +34,6 @@ class Database:
         return [RestaurantReview(**review) for review in reviews]
 
 
-def get_database():
+def get_database() -> Database:
     connection = DatabaseConnection()
     return Database(connection)
