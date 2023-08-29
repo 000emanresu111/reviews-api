@@ -24,7 +24,7 @@ class ReviewInfo(BaseModel):
     review_date: str = Field(..., description="Date of published review")
     review_reviewer: str = Field(..., description="Name of reviewer")
     review_text: Union[str, None] = Field(
-        ..., description="Comment/feedback about the restaurant"
+        ..., description="Comment/feedback about the restaurant", max_length=500
     )
     review_sentiment: ReviewSentiment = Field(
         ...,
@@ -62,7 +62,7 @@ class ReviewerValidator:
         return value.strip()
 
 
-class ReviewDateValidator:
+class DateValidator:
     @validator("review_date", pre=True)
     def validate_review_date(cls, value):
         try:
