@@ -13,7 +13,7 @@ def get_controller(database: Database = Depends(get_database)):
 
 @router.get("/")
 async def root():
-    return {"message": "Ciao!"}
+    return {"status": "OK"}
 
 
 @router.post("/reviews/add-review")
