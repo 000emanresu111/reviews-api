@@ -6,14 +6,10 @@ from fastapi import status
 from fastapi.testclient import TestClient
 
 from reviews_api.controllers.crud import ReviewController
-from reviews_api.models.schemas import (
-    RestaurantInfo,
-    RestaurantReview,
-    ReviewInfo,
-    ReviewSentiment,
-)
-from reviews_api.routes.routes import router
 from reviews_api.database.database import get_database
+from reviews_api.models.schemas import (RestaurantInfo, RestaurantReview,
+                                        ReviewInfo, ReviewSentiment)
+from reviews_api.routes.routes import router
 
 client = TestClient(router)
 
