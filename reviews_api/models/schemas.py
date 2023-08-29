@@ -32,6 +32,12 @@ class ReviewInfo(BaseModel):
     )
     review_rating: PositiveFloat = Field(..., description="Review star rating")
 
+    @validator("review_text", pre=True, always=True)
+    def truncate_review_text(cls, value):
+        if value is not None and len(value) > 500:
+            return value[:500]
+        return value
+
 
 class RestaurantReview(BaseModel):
     restaurant: RestaurantInfo

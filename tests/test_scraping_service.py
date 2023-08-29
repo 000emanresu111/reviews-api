@@ -18,6 +18,6 @@ def test_scrape_justeat_reviews(mock_webdriver):
     ].find_element.return_value.text = "Review Text"
     mock_driver.find_element.return_value.text = "John Doe"
 
-    reviews = scrape_justeat_reviews("test_restaurant")
+    reviews = scrape_justeat_reviews("test_restaurant", use_click_show_more=False)
 
     assert len(reviews) == 1

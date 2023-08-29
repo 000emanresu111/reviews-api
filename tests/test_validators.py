@@ -98,18 +98,3 @@ def test_validate_rating_valid():
     valid_data = {"restaurant_rating": 4.5, "review_rating": 3.0}
     assert RatingValidator.validate_rating(valid_data["restaurant_rating"]) == 4.5
     assert RatingValidator.validate_rating(valid_data["review_rating"]) == 3.0
-
-
-def test_validate_review_text_max_length():
-    valid_data = {
-        "review_date": "08/30/2023 12:34:56",
-        "review_reviewer": "John Doe",
-        "review_text": "A" * 501,
-        "review_sentiment": ReviewSentiment.POSITIVE,
-        "review_rating": 4.5,
-    }
-
-    with pytest.raises(
-        ValueError, match="ensure this value has at most 500 characters"
-    ):
-        ReviewInfo(**valid_data)
