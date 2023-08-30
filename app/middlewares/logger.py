@@ -1,6 +1,7 @@
 from fastapi import Request
 from fastapi.logger import logger as fastapi_logger
 
+
 class LoggerMiddleware:
     async def __call__(self, request: Request, call_next):
         response = await call_next(request)

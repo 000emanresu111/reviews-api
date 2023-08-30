@@ -11,8 +11,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 
 from app.models.schemas import RestaurantInfo, RestaurantReview
-from app.scraper.scraping_utils import (get_normalized_rating,
-                                        scrape_review_element)
+from app.scraper.scraping_utils import get_normalized_rating, scrape_review_element
 
 WEBDRIVER_PATH = which("chromedriver")
 
@@ -85,9 +84,9 @@ def scrape_justeat_reviews(
         driver.quit()
 
         return [
-                RestaurantReview(restaurant=restaurant_info, review=review)
-                for review in reviews
-            ]
+            RestaurantReview(restaurant=restaurant_info, review=review)
+            for review in reviews
+        ]
     except Exception as e:
         error_message = f"An error occurred during scraping: {str(e)}"
         fastapi_logger.error(error_message)
