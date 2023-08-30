@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException
 
-from app.scraper.scraping_service import scrape_justeat_reviews
 from app.controllers.crud import ReviewController
 from app.database.db import Database, get_database
-from app.models.schemas import RestaurantReview
+from app.models.schemas import RestaurantNameQuery, RestaurantReview
+from app.scraper.scraping_service import scrape_justeat_reviews
+from app.utils.exceptions import RestaurantNotFoundError
 
 router = APIRouter()
 
@@ -37,10 +38,14 @@ async def fetch_reviews(controller: ReviewController = Depends(get_controller)):
 
 @router.get("/scrape-justeat-reviews")
 async def scrape_justeat_reviews_endpoint(
-    restaurant_name: str = Query(..., description="Name of the restaurant")
+    query_params: RestaurantNameQuery
 ):
     try:
-        reviews = scrape_justeat_reviews(restaurant_name)
+        reviews = scrape_justeat_reviews(query_params.restaurant_name)
+        if not reviews:
+            raise HTTPException(status_code=404, detail="No reviews found for the restaurant")
         return reviews
+    except RestaurantNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

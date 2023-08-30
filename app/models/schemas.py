@@ -4,12 +4,13 @@ from typing import Union
 
 from pydantic import BaseModel, Field, PositiveFloat, validator
 
-
+class RestaurantNameQuery(BaseModel):
+    restaurant_name: str = Field(..., description="Name of the restaurant to scrape reviews from")
+    
 class ReviewSentiment(str, Enum):
     NEGATIVE = "0"
     POSITIVE = "1"
     NONE = "None"
-
 
 class RestaurantInfo(BaseModel):
     restaurant_name: str = Field(
