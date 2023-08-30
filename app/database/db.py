@@ -1,14 +1,21 @@
+import os
 from datetime import datetime
 from typing import List
+
+from bson import ObjectId
+from dotenv import load_dotenv
 from pymongo import MongoClient
 from pymongo.collection import Collection
-from app.models.schemas import RestaurantReview
-from bson import ObjectId
 
+from app.models.schemas import RestaurantReview
+from app.utils.exceptions import DatabaseError
+
+load_dotenv()
 
 class DatabaseSettings:
-    DB_NAME = "restaurant_reviews_db"
-    COLLECTION_NAME = "reviews"
+    DB_URL = os.getenv("DATABASE_URL")
+    DB_NAME = os.getenv("DB_NAME")
+    COLLECTION_NAME = os.getenv("COLLECTION_NAME")
 
 
 class DatabaseConnection:
