@@ -1,6 +1,6 @@
 from typing import List
 
-from app.database.database import Database
+from app.database.db import Database
 from app.models.schemas import RestaurantReview
 
 

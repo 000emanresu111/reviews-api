@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 
 from app.scraper.scraping_service import scrape_justeat_reviews
 from app.controllers.crud import ReviewController
-from app.database.database import Database, get_database
+from app.database.db import Database, get_database
 from app.models.schemas import RestaurantReview
 
 router = APIRouter()

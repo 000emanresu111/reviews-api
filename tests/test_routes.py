@@ -6,7 +6,7 @@ from fastapi import status
 from fastapi.testclient import TestClient
 
 from app.controllers.crud import ReviewController
-from app.database.database import get_database
+from app.database.db import get_database
 from app.models.schemas import (
     RestaurantInfo,
     RestaurantReview,
