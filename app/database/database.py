@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List
 from pymongo import MongoClient
 from pymongo.collection import Collection
-from reviews_api.models.schemas import RestaurantReview
+from app.models.schemas import RestaurantReview
 from bson import ObjectId
 
 

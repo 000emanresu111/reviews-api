@@ -1,7 +1,7 @@
 from typing import List
 
-from reviews_api.database.database import Database
-from reviews_api.models.schemas import RestaurantReview
+from app.database.database import Database
+from app.models.schemas import RestaurantReview
 
 
 class ReviewController:

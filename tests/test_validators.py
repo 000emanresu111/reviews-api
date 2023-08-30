@@ -1,6 +1,6 @@
 import pytest
 
-from reviews_api.models.schemas import (
+from app.models.schemas import (
     RatingValidator,
     ReviewSentimentValidator,
     ReviewSentiment,

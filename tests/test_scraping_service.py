@@ -1,8 +1,8 @@
 from unittest.mock import patch
-from reviews_api.scraper.scraping_service import scrape_justeat_reviews
+from app.scraper.scraping_service import scrape_justeat_reviews
 
 
-@patch("reviews_api.scraper.scraping_service.webdriver")
+@patch("app.scraper.scraping_service.webdriver")
 def test_scrape_justeat_reviews(mock_webdriver):
     mock_driver = mock_webdriver.Chrome.return_value
     mock_driver.find_elements.return_value = [mock_driver.find_element.return_value]

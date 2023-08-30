@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from reviews_api.middlewares.error_handler import ErrorHandlerMiddleware
+from app.middlewares.error_handler import ErrorHandlerMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
-from reviews_api.routes.routes import router
+from app.routes.routes import router
 
 app = FastAPI()
 

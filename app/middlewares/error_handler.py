@@ -1,7 +1,7 @@
 from fastapi import Request, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import ValidationError
-from reviews_api.utils.exceptions import DatabaseError
+from app.utils.exceptions import DatabaseError
 from starlette.middleware.base import BaseHTTPMiddleware
 
 

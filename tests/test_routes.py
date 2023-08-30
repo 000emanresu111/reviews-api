@@ -5,15 +5,15 @@ import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
 
-from reviews_api.controllers.crud import ReviewController
-from reviews_api.database.database import get_database
-from reviews_api.models.schemas import (
+from app.controllers.crud import ReviewController
+from app.database.database import get_database
+from app.models.schemas import (
     RestaurantInfo,
     RestaurantReview,
     ReviewInfo,
     ReviewSentiment,
 )
-from reviews_api.routes.routes import router
+from app.routes.routes import router
 
 
 client = TestClient(router)
@@ -59,7 +59,7 @@ def test_add_review(mock_controller, mock_database):
     restaurant_review = RestaurantReview(restaurant=restaurant_data, review=review_data)
 
     with patch(
-        "reviews_api.controllers.crud.ReviewController", return_value=mock_controller
+        "app.controllers.crud.ReviewController", return_value=mock_controller
     ):
         mock_controller_instance = mock_controller.return_value
         mock_controller_instance.add_review.return_value = restaurant_review
@@ -93,7 +93,7 @@ def test_fetch_reviews(mock_controller, mock_database):
     mock_database.add_review(restaurant_review)
 
     with patch(
-        "reviews_api.controllers.crud.ReviewController", return_value=mock_controller
+        "app.controllers.crud.ReviewController", return_value=mock_controller
     ):
         mock_controller_instance = mock_controller.return_value
         mock_controller_instance.fetch_reviews.return_value = [restaurant_review]
