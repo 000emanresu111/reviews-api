@@ -22,6 +22,9 @@ class Database:
     def __init__(self, connection: DatabaseConnection):
         self.connection = connection
 
+    def create_index(self, keys: list, unique: bool = False):
+        self.connection.collection.create_index(keys, unique=unique)
+
     def add_review(self, review: RestaurantReview) -> RestaurantReview:
         review_dict = review.dict()
         review_dict["review_date"] = datetime.now()
