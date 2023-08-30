@@ -13,24 +13,59 @@ class ReviewSentiment(str, Enum):
 
 class RestaurantInfo(BaseModel):
     restaurant_name: str = Field(
-        ..., min_length=1, description="Restaurant name or identifier"
+        ...,
+        min_length=1,
+        description="Restaurant name or identifier",
+        example="Delicious Eats",
     )
     restaurant_rating: PositiveFloat = Field(
-        ..., description="Overall restaurant star rating"
+        ...,
+        description="Overall restaurant star rating between 1 and 5",
+        example=4.7,
     )
+
+    class Config:
+        schema_extra = {
+            "example": {"restaurant_name": "Delicious Eats", "restaurant_rating": 4.7}
+        }
 
 
 class ReviewInfo(BaseModel):
-    review_date: str = Field(..., description="Date of published review")
-    review_reviewer: str = Field(..., description="Name of reviewer")
+    review_date: str = Field(
+        ...,
+        description="Date of published review in MM/DD/YYYY HH:MM:SS format",
+        example="01/01/2023 12:00:00",
+    )
+    review_reviewer: str = Field(
+        ..., description="Name of reviewer", example="John Doe"
+    )
     review_text: Union[str, None] = Field(
-        ..., description="Comment/feedback about the restaurant", max_length=500
+        ...,
+        description="Comment/feedback about the restaurant (max 500 characters)",
+        example="Great food and service!",
+        max_length=500,
     )
     review_sentiment: ReviewSentiment = Field(
         ...,
-        description="Sentiment of the review: 0 (negative), 1 (positive), or None (not specified)",
+        description="Sentiment of the review: 'NEGATIVE', 'POSITIVE', or 'NONE'",
+        example="1",
     )
-    review_rating: PositiveFloat = Field(..., description="Review star rating")
+    review_rating: PositiveFloat = Field(
+        ...,
+        description="Review star rating between 1 and 5",
+        example=4.5,
+    )
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "review_date": "01/01/2023 12:00:00",
+                "review_reviewer": "John Doe",
+                "review_text": "Great food and service!",
+                "review_sentiment": "1",
+                "review_rating": 4.5,
+            }
+        }
 
     @validator("review_text", pre=True, always=True)
     def truncate_review_text(cls, value):
