@@ -27,12 +27,10 @@ def scrape_review_element(review_element):
     reviewer = get_text_element(review_element, '[data-test-id="review-author"]')
     review_date = get_text_element(review_element, '[data-test-id="review-date"]')
 
-    review_info = ReviewInfo(
+    return ReviewInfo(
         review_date=review_date,
         review_reviewer=reviewer,
         review_text=review_text,
         review_sentiment=ReviewSentiment.NONE,
         review_rating=normalized_rating,
     )
-
-    return review_info

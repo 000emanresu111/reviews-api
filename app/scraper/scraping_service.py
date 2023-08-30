@@ -2,6 +2,8 @@ from shutil import which
 from time import sleep
 from typing import List
 
+from fastapi import HTTPException
+from fastapi.logger import logger as fastapi_logger
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
@@ -38,8 +40,7 @@ def scrape_justeat_reviews(
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
     url = f"https://www.justeat.it/restaurants-{restaurant_name}/reviews"
-    print("Scraping URL:", url)
-    print("\n")
+    fastapi_logger.info(f"Scraping URL: {url}")
 
     driver.get(url)
     sleep(2)
@@ -59,29 +60,35 @@ def scrape_justeat_reviews(
         )
         restaurant_normalized_rating = get_normalized_rating(percentage)
     except NoSuchElementException:
-        restaurant_normalized_rating = None
+        error_message = f"Restaurant '{restaurant_name}' not found"
+        fastapi_logger.error(error_message)
+        raise HTTPException(status_code=404, detail=error_message)
 
     restaurant_info = RestaurantInfo(
         restaurant_name=url.split("/")[-2],
         restaurant_rating=restaurant_normalized_rating,
     )
 
-    if use_click_show_more:
-        click_show_more(driver)
+    try:
+        if use_click_show_more:
+            click_show_more(driver)
 
-    review_elements = driver.find_elements(
-        By.CSS_SELECTOR, '[data-test-id="review-container"]'
-    )
-    print("Found", len(review_elements), "review elements")
-    print("\n")
+        review_elements = driver.find_elements(
+            By.CSS_SELECTOR, '[data-test-id="review-container"]'
+        )
+        fastapi_logger.info(f"Found {len(review_elements)} review elements")
 
-    reviews = [
-        scrape_review_element(review_element) for review_element in review_elements
-    ]
+        reviews = [
+            scrape_review_element(review_element) for review_element in review_elements
+        ]
 
-    driver.quit()
+        driver.quit()
 
-    return [
-        RestaurantReview(restaurant=restaurant_info, review=review)
-        for review in reviews
-    ]
+        return [
+                RestaurantReview(restaurant=restaurant_info, review=review)
+                for review in reviews
+            ]
+    except Exception as e:
+        error_message = f"An error occurred during scraping: {str(e)}"
+        fastapi_logger.error(error_message)
+        raise HTTPException(status_code=500, detail=error_message)

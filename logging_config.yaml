@@ -1,0 +1,14 @@
+version: 1
+disable_existing_loggers: false
+formatters:
+  detailed:
+    class: logging.Formatter
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: detailed
+root:
+  level: INFO
+  handlers: [console]
