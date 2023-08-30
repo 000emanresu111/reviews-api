@@ -58,9 +58,7 @@ def test_add_review(mock_controller, mock_database):
 
     restaurant_review = RestaurantReview(restaurant=restaurant_data, review=review_data)
 
-    with patch(
-        "app.controllers.crud.ReviewController", return_value=mock_controller
-    ):
+    with patch("app.controllers.crud.ReviewController", return_value=mock_controller):
         mock_controller_instance = mock_controller.return_value
         mock_controller_instance.add_review.return_value = restaurant_review
 
@@ -92,9 +90,7 @@ def test_fetch_reviews(mock_controller, mock_database):
     restaurant_review = RestaurantReview(restaurant=restaurant_data, review=review_data)
     mock_database.add_review(restaurant_review)
 
-    with patch(
-        "app.controllers.crud.ReviewController", return_value=mock_controller
-    ):
+    with patch("app.controllers.crud.ReviewController", return_value=mock_controller):
         mock_controller_instance = mock_controller.return_value
         mock_controller_instance.fetch_reviews.return_value = [restaurant_review]
 

@@ -8,9 +8,9 @@ from pymongo import MongoClient
 from pymongo.collection import Collection
 
 from app.models.schemas import RestaurantReview
-from app.utils.exceptions import DatabaseError
 
 load_dotenv()
+
 
 class DatabaseSettings:
     DB_URL = os.getenv("DATABASE_URL")
