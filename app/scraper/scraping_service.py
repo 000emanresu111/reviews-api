@@ -11,6 +11,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 
 from app.models.schemas import RestaurantInfo, RestaurantReview
+from app.utils.exceptions import RestaurantNotFoundError
 from app.scraper.scraping_utils import get_normalized_rating, scrape_review_element
 
 WEBDRIVER_PATH = which("chromedriver")
@@ -48,6 +49,7 @@ def scrape_justeat_reviews(
         restaurant_rating_element = driver.find_element(
             By.CLASS_NAME, "c-overall-ratingStarsHeader"
         )
+
         restaurant_rating_percentage_element = restaurant_rating_element.find_element(
             By.CSS_SELECTOR, ".RatingMultiStarVariant_c-rating-mask_1c0Q3"
         )
@@ -59,9 +61,12 @@ def scrape_justeat_reviews(
         )
         restaurant_normalized_rating = get_normalized_rating(percentage)
     except NoSuchElementException:
-        error_message = f"Restaurant '{restaurant_name}' not found"
+        error_message = f"Restaurant '{restaurant_name}' not found or reviews not found"
         fastapi_logger.error(error_message)
-        raise HTTPException(status_code=404, detail=error_message)
+        raise RestaurantNotFoundError(error_message)
+    except Exception as e:
+        fastapi_logger.error(f"An error occurred during scraping: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
     restaurant_info = RestaurantInfo(
         restaurant_name=url.split("/")[-2],
@@ -75,6 +80,9 @@ def scrape_justeat_reviews(
         review_elements = driver.find_elements(
             By.CSS_SELECTOR, '[data-test-id="review-container"]'
         )
+        if not review_elements:
+            raise HTTPException(status_code=404, detail="No reviews found")
+
         fastapi_logger.info(f"Found {len(review_elements)} review elements")
 
         reviews = [
