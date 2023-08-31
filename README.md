@@ -155,7 +155,7 @@ Users can scrape reviews from a specific restaurant on JustEat. The scraping pro
 You may perform requests using a tool such as Postman or cURL, or alternatevely you can use the Swagger UI at http://localhost:8086/doc.
 
 ## Usage Example
-### 1) Add a review
+### Add a review
 
 #### Request
 ```
@@ -201,7 +201,7 @@ POST /reviews/add-review
 }
 ```
 
-### 2) Fetch reviews
+### Fetch reviews
 
 #### Request
 ```
