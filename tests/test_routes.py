@@ -64,7 +64,7 @@ def test_add_review(mock_controller, mock_database):
         mock_controller_instance.add_review.return_value = restaurant_review
 
         expected_response = SuccessResponse(
-            data={"message": "Review added successfully", "review": restaurant_review}
+            data={"message": "Review added successfully", "restaurant_review": restaurant_review}
         )
 
         response = client.post(
