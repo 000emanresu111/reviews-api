@@ -21,6 +21,7 @@ def scrape_review_element(review_element):
     )
     rating_percentage_style = rating_percentage_element.get_attribute("style")
     percentage = float(rating_percentage_style.split(":")[-1].strip().replace("%;", ""))
+
     normalized_rating = get_normalized_rating(percentage)
 
     review_text = get_text_element(review_element, '[data-test-id="review-text"]')
