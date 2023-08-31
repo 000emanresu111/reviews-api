@@ -21,7 +21,6 @@ class DatabaseSettings:
 
 class DatabaseConnection:
     def __init__(self):
-        print("ENV", os.environ.get("DOCKER_ENV"))
         if os.environ.get("DOCKER_ENV"):
             self.client = MongoClient(DatabaseSettings.MONGODB_URI_DOCKER)
         else:
