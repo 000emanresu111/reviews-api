@@ -51,6 +51,7 @@ $ pytest -vv
 ```
 
 ### 6) Scraping
+- JustEat revews pages are built using dynamic Javascript, so an headless browser to scrape the data may be easier to setup and maintain.
 - If you want to test the scraping service, you need to have Chrome and ChromeDriver installed on your machine.
 - You can choose the latest version from [here](https://googlechromelabs.github.io/chrome-for-testing/#stable) based on your Operating System.
 - Alternatively, you can build and run the Dockerfile, which automatically downloads and install the latest version of Chrome and ChromeDriver.
@@ -69,14 +70,41 @@ $ pytest -vv
   - URL: `https://www.justeat.it/restaurants-pizzeria-friggitoria-mascalzone-napoli`  
     SEO Name = `pizzeria-friggitoria-mascalzone-napoli`
 
+#### 6.1) Scraping scenarios
 
-```bash
-DevTools listening on ws://127.0.0.1:52952/devtools/browser/4468c260-6d00-4254-9a5e-d908f4f7e657
-2023-08-31 11:57:28,722 - fastapi - INFO - Scraping URL: https://www.justeat.it/restaurants-fa-lu-cioli-1917-roma/reviews
-2023-08-31 11:57:32,098 - fastapi - INFO - Found 16 review elements
-2023-08-31 11:57:39,063 - fastapi - INFO - Request - Method: GET, Path: /scrape-justeat-reviews, Status: 200
-2023-08-31 11:57:39,066 - uvicorn.access - INFO - 127.0.0.1:52947 - "GET /scrape-justeat-reviews?restaurant_name=fa-lu-cioli-1917-roma HTTP/1.1" 200
-```
+1. The restaurant exists and has reviews.
+
+   In case of successful scraping, you will get the list of scraped reviews.  
+   In the logs you can also find more information, such as the total amount of reviews elements.
+
+    ```bash
+    2023-08-31 11:57:28,722 - fastapi - INFO - Scraping URL: https://www.justeat.it/restaurants-fa-lu-cioli-1917-roma/reviews
+    2023-08-31 11:57:32,098 - fastapi - INFO - Found 16 review elements
+    2023-08-31 11:57:39,063 - fastapi - INFO - Request - Method: GET, Path: /scrape-justeat-reviews, Status: 200
+    2023-08-31 11:57:39,066 - uvicorn.access - INFO - 127.0.0.1:52947 - "GET /scrape-justeat-reviews?restaurant_name=fa-lu-cioli-1917-roma HTTP/1.1" 200
+    ```
+
+2. The restaurant exists but has no reviews.
+  
+  
+   You will get a 204 response code and an empty response body. Message is found in the headers.
+    ``` 
+    date: Thu,31 Aug 2023 11:38:06 GMT 
+    server: uvicorn 
+    x-warning-message: There are still no reviews for restaurant 'birreria-del-centro-napoli-80134' 
+    ```
+  
+3. The restaurant does not exist.
+
+   You will get a 404 response code and an empty response body.
+    ```json
+    {
+      "detail": {
+        "success": false,
+        "error": "Restaurant 'this-doesnt-exists' not found"
+      }
+    }
+    ```
 
 ## Project description
 
