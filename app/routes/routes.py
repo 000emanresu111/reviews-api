@@ -30,9 +30,11 @@ async def add_review(
 ):
     try:
         controller.add_review(review)
-        return SuccessResponse(
-            data={"message": "Review added successfully", "review": review}
-        )
+        response_data = {
+            "message": "Review added successfully",
+            "restaurant_review": review
+        }
+        return SuccessResponse(data=response_data)
     except Exception as e:
         error_response = ErrorResponse(error=str(e)).dict()
         raise HTTPException(

@@ -13,17 +13,16 @@ load_dotenv()
 
 
 class DatabaseSettings:
-    DB_URL = os.getenv("DATABASE_URL")
-    DB_NAME = os.getenv("DB_NAME")
+    MONGODB_URI = os.getenv("MONGODB_URI_LOCAL")
+    MONGODB_NAME = os.getenv("MONGODB_NAME")
     COLLECTION_NAME = os.getenv("COLLECTION_NAME")
 
 
 class DatabaseConnection:
     def __init__(self):
-        self.client = MongoClient("mongodb://localhost:27017/")
-        self.db = self.client[DatabaseSettings.DB_NAME]
+        self.client = MongoClient(DatabaseSettings.MONGODB_URI)
+        self.db = self.client[DatabaseSettings.MONGODB_NAME]
         self.collection: Collection = self.db[DatabaseSettings.COLLECTION_NAME]
-
 
 class Database:
     def __init__(self, connection: DatabaseConnection):
