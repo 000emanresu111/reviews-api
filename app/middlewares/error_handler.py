@@ -21,11 +21,10 @@ class ErrorHandlerMiddleware(BaseHTTPMiddleware):
                 content={"message": e.detail},
             )
         except ValidationError as e:
-            errors = e.errors()
             error_messages = []
-            for error in errors:
+            for error in e.errors():
                 error_messages.append(
-                    {"field": error["loc"][2], "message": error["msg"]}
+                    {"field": ".".join(error["loc"]), "message": error["msg"]}
                 )
             return JSONResponse(
                 status_code=422,

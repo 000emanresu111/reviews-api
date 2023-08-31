@@ -1,5 +1,7 @@
 FROM python:3.9
 
+ENV DOCKER_ENV=True
+
 WORKDIR /code
 
 # Install Chrome
@@ -32,6 +34,8 @@ COPY Makefile /code/Makefile
 # Install dependencies
 RUN poetry install --no-dev
 
+# Run application
 CMD ["poetry", "run", "uvicorn", "main:app", "--port", "8086", "--host", "0.0.0.0"]
 
+# Expose port
 EXPOSE 8086

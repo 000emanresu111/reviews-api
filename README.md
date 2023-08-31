@@ -39,6 +39,7 @@ This will run both the backend server on port 8086 and the MongoDB instance on p
 ```
 
 #### 4.2) Using Docker
+Make sure your local Docker deamon is up and running.
 ```bash
 $ docker compose build
 $ docker compose up
@@ -51,7 +52,9 @@ $ pytest -vv
 
 ### 6) Scraping
 If you want to test the scraping service, you need to have Chrome and ChromeDriver installed on your machine.
+
 You can choose the latest version from [here](https://googlechromelabs.github.io/chrome-for-testing/#stable) based on your Operating System.
+
 Alternatively, you can build and run the Dockerfile, which automatically downloads and install the latest version of Chrome and ChromeDriver.
 
 ## API endpoints documentation and usage
@@ -87,7 +90,9 @@ The project is organized as follows:
 
 ### System Architecture
 The Reviews API app backend is implemented using Python, FastAPI and MongoDB.
+
 The backend communicates with a MongoDB database for storing reviews information. 
+
 The server exposes a RESTful API that the client can interact with to perform various operations.
 
 ### Features description
