@@ -1,12 +1,13 @@
 from app.scraper.scraping_utils import scrape_review_element
 from app.scraper.scraping_utils import get_normalized_rating
 
+
 def test_get_normalized_rating():
     percentage = 80.0
     expected_result = 4.0
 
     result = get_normalized_rating(percentage)
-    
+
     assert result == expected_result
 
 

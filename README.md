@@ -60,10 +60,14 @@ $ pytest -vv
 
   For instance:
 
-  - URL: https://www.justeat.it/restaurants-fa-lu-cioli-1917-roma/reviews -> SEO Name=fa-lu-cioli-1917-roma
-  - URL: https://www.justeat.it/restaurants-ristorante-pizzeria-roma-roma/reviews -> SEO Name=ristorante-pizzeria-roma-roma
-  - URL: https://www.justeat.it/restaurants-pizzeria-friggitoria-mascalzone-napoli/reviews -> SEO Name=pizzeria-friggitoria-mascalzone-napoli
+  - URL = `https://www.justeat.it/restaurants-fa-lu-cioli-1917-roma`  
+    SEO Name = `fa-lu-cioli-1917-roma`
 
+  - URL: `https://www.justeat.it/restaurants-ristorante-pizzeria-roma-roma`  
+    SEO Name=`ristorante-pizzeria-roma-roma`
+
+  - URL: `https://www.justeat.it/restaurants-pizzeria-friggitoria-mascalzone-napoli`  
+    SEO Name=`pizzeria-friggitoria-mascalzone-napoli`
 
 
 ```bash
