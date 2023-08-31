@@ -51,14 +51,28 @@ $ pytest -vv
 ```
 
 ### 6) Scraping
-If you want to test the scraping service, you need to have Chrome and ChromeDriver installed on your machine.
+- If you want to test the scraping service, you need to have Chrome and ChromeDriver installed on your machine.
+- You can choose the latest version from [here](https://googlechromelabs.github.io/chrome-for-testing/#stable) based on your Operating System.
+- Alternatively, you can build and run the Dockerfile, which automatically downloads and install the latest version of Chrome and ChromeDriver.
+- For sake of simplicity, the restaurant name given in input must match the SEO name of the restaurant on JustEat. 
+  
+  You can find the SEO name of a restaurant by inspecting the URL of the restaurant page on JustEat.
 
-You can choose the latest version from [here](https://googlechromelabs.github.io/chrome-for-testing/#stable) based on your Operating System.
+  For instance:
 
-Alternatively, you can build and run the Dockerfile, which automatically downloads and install the latest version of Chrome and ChromeDriver.
+  - URL: https://www.justeat.it/restaurants-fa-lu-cioli-1917-roma/reviews -> SEO Name=fa-lu-cioli-1917-roma
+  - URL: https://www.justeat.it/restaurants-ristorante-pizzeria-roma-roma/reviews -> SEO Name=ristorante-pizzeria-roma-roma
+  - URL: https://www.justeat.it/restaurants-pizzeria-friggitoria-mascalzone-napoli/reviews -> SEO Name=pizzeria-friggitoria-mascalzone-napoli
 
-## API endpoints documentation and usage
-You may perform requests using a tool such as Postman or cURL, or alternatevely you can use the Swagger UI at http://localhost:8086/doc.
+
+
+```bash
+DevTools listening on ws://127.0.0.1:52952/devtools/browser/4468c260-6d00-4254-9a5e-d908f4f7e657
+2023-08-31 11:57:28,722 - fastapi - INFO - Scraping URL: https://www.justeat.it/restaurants-fa-lu-cioli-1917-roma/reviews
+2023-08-31 11:57:32,098 - fastapi - INFO - Found 16 review elements
+2023-08-31 11:57:39,063 - fastapi - INFO - Request - Method: GET, Path: /scrape-justeat-reviews, Status: 200
+2023-08-31 11:57:39,066 - uvicorn.access - INFO - 127.0.0.1:52947 - "GET /scrape-justeat-reviews?restaurant_name=fa-lu-cioli-1917-roma HTTP/1.1" 200
+```
 
 ## Project description
 
@@ -104,3 +118,137 @@ Users can fetch all reviews from the db. The reviews are returned in a paginated
 
 - Scraping:
 Users can scrape reviews from a specific restaurant on JustEat. The scraping process is performed asynchronously using Selenium and ChromeDriver.
+
+## API endpoints documentation
+You may perform requests using a tool such as Postman or cURL, or alternatevely you can use the Swagger UI at http://localhost:8086/doc.
+
+## Usage Example
+### 1) Add a review
+
+#### Request
+```
+POST /reviews/add-review
+```
+
+```json
+{
+  "restaurant": {
+    "restaurant_name": "Delicious Eats",
+    "restaurant_rating": 4.7
+  },
+  "review": {
+    "review_date": "01/01/2023 12:00:00",
+    "review_reviewer": "John Doe",
+    "review_text": "Great food and service!",
+    "review_sentiment": "1",
+    "review_rating": 4.5
+  }
+}
+```
+
+#### Response
+```json
+{
+  "success": true,
+  "data": {
+    "message": "Review added successfully",
+    "restaurant_review": {
+      "restaurant": {
+        "restaurant_name": "Delicious Eats",
+        "restaurant_rating": 4.7
+      },
+      "review": {
+        "review_date": "01/01/2023 12:00:00",
+        "review_reviewer": "John Doe",
+        "review_text": "Great food and service!",
+        "review_sentiment": "1",
+        "review_rating": 4.5
+      }
+    }
+  }
+}
+```
+
+### 2) Fetch reviews
+
+#### Request
+```
+GET /reviews/fetch-reviews
+```
+
+#### Response
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "restaurant": {
+        "restaurant_name": "Delicious Eats",
+        "restaurant_rating": 4.7
+      },
+      "review": {
+        "review_date": "01/01/2023 12:00:00",
+        "review_reviewer": "John Doe",
+        "review_text": "Great food and service!",
+        "review_sentiment": "1",
+        "review_rating": 4.5
+      }
+    },
+    {
+      "restaurant": {
+        "restaurant_name": "Fake restaurant",
+        "restaurant_rating": 5
+      },
+      "review": {
+        "review_date": "01/01/2024 12:00:00",
+        "review_reviewer": "John Doe",
+        "review_text": "Great food!",
+        "review_sentiment": "1",
+        "review_rating": 4.2
+      }
+    }
+  ]
+}
+```
+
+### Scrape reviews from JustEat
+
+#### Request
+```
+GET /scrape-justeat-reviews?restaurant_name=pizzeria-friggitoria-mascalzone-napoli
+```
+
+
+#### Response
+```json
+{
+  "reviews": [
+    {
+      "restaurant": {
+        "restaurant_name": "restaurants-pizzeria-friggitoria-mascalzone-napoli",
+        "restaurant_rating": 4.1
+      },
+      "review": {
+        "review_date": "20/08/2023",
+        "review_reviewer": "Andrea",
+        "review_text": null,
+        "review_sentiment": "None",
+        "review_rating": 5
+      }
+    },
+    {
+      "restaurant": {
+        "restaurant_name": "restaurants-pizzeria-friggitoria-mascalzone-napoli",
+        "restaurant_rating": 4.1
+      },
+      "review": {
+        "review_date": "19/08/2023",
+        "review_reviewer": "Daniela",
+        "review_text": "Ottima la pizza, peccato che a volte la sbagliano, a volte consegnano ordini mancanti, a volte arrivano in straritardo... peccato davvero",
+        "review_sentiment": "None",
+        "review_rating": 3.5
+      }
+    },
+
+...
+```
