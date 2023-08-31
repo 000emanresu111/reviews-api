@@ -1,16 +1,21 @@
 from datetime import datetime
 from enum import Enum
-from typing import Union
+from typing import Union, List
 
 from pydantic import BaseModel, Field, PositiveFloat, validator
 
+
 class RestaurantNameQuery(BaseModel):
-    restaurant_name: str = Field(..., description="Name of the restaurant to scrape reviews from")
-    
+    restaurant_name: str = Field(
+        ..., description="Name of the restaurant to scrape reviews from"
+    )
+
+
 class ReviewSentiment(str, Enum):
     NEGATIVE = "0"
     POSITIVE = "1"
     NONE = "None"
+
 
 class RestaurantInfo(BaseModel):
     restaurant_name: str = Field(
@@ -114,3 +119,23 @@ class ReviewSentimentValidator:
         if not isinstance(value, ReviewSentiment):
             raise ValueError("Invalid sentiment value")
         return value
+
+
+class SuccessResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
+class ErrorResponse(BaseModel):
+    success: bool = False
+    error: str
+
+
+class ScrapeReviewsResponse(BaseModel):
+    reviews: List[RestaurantReview]
+    message: str
+
+
+class ReviewsListResponse(BaseModel):
+    success: bool = True
+    data: List[RestaurantReview]

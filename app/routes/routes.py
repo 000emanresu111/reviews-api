@@ -1,8 +1,14 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.controllers.crud import ReviewController
 from app.database.db import Database, get_database
-from app.models.schemas import RestaurantNameQuery, RestaurantReview
+from app.models.schemas import (
+    ErrorResponse,
+    RestaurantReview,
+    ReviewsListResponse,
+    ScrapeReviewsResponse,
+    SuccessResponse,
+)
 from app.scraper.scraping_service import scrape_justeat_reviews
 from app.utils.exceptions import RestaurantNotFoundError, ReviewsNotFoundWarning
 
@@ -18,34 +24,60 @@ async def root():
     return {"status": "OK"}
 
 
-@router.post("/reviews/add-review")
+@router.post("/reviews/add-review", response_model=SuccessResponse, status_code=201)
 async def add_review(
     review: RestaurantReview, controller: ReviewController = Depends(get_controller)
 ):
     try:
-        return controller.add_review(review)
+        controller.add_review(review)
+        return SuccessResponse(
+            data={"message": "Review added successfully", "review": review}
+        )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        error_response = ErrorResponse(error=str(e)).dict()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=error_response
+        )
 
 
-@router.get("/reviews/fetch-reviews")
+@router.get(
+    "/reviews/fetch-reviews", response_model=ReviewsListResponse, status_code=200
+)
 async def fetch_reviews(controller: ReviewController = Depends(get_controller)):
     try:
-        return controller.fetch_reviews()
+        reviews = controller.fetch_reviews()
+        return ReviewsListResponse(data=reviews)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        error_response = ErrorResponse(error=str(e)).dict()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=error_response
+        )
 
 
-@router.get("/scrape-justeat-reviews")
-async def scrape_justeat_reviews_endpoint(
-    restaurant_name: str
-):
+@router.get(
+    "/scrape-justeat-reviews", response_model=ScrapeReviewsResponse, status_code=200
+)
+async def scrape_justeat_reviews_endpoint(restaurant_name: str):
     try:
-        return scrape_justeat_reviews(restaurant_name)
+        scraped_reviews = scrape_justeat_reviews(restaurant_name)
+        return ScrapeReviewsResponse(
+            reviews=scraped_reviews, message="Reviews scraped successfully"
+        )
     except ReviewsNotFoundWarning as e:
-        response_headers = { "X-Warning-Message": str(e) }
-        raise HTTPException(status_code=204, headers=response_headers)
+        response_headers = {"X-Warning-Message": str(e)}
+        error_response = ErrorResponse(error=str(e)).dict()
+        raise HTTPException(
+            status_code=status.HTTP_204_NO_CONTENT,
+            headers=response_headers,
+            detail=error_response,
+        )
     except RestaurantNotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        error_response = ErrorResponse(error=str(e)).dict()
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=error_response
+        )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        error_response = ErrorResponse(error=str(e)).dict()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=error_response
+        )

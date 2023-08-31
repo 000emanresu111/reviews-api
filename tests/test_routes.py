@@ -12,9 +12,10 @@ from app.models.schemas import (
     RestaurantReview,
     ReviewInfo,
     ReviewSentiment,
+    ReviewsListResponse,
+    SuccessResponse,
 )
 from app.routes.routes import router
-
 
 client = TestClient(router)
 
@@ -62,6 +63,10 @@ def test_add_review(mock_controller, mock_database):
         mock_controller_instance = mock_controller.return_value
         mock_controller_instance.add_review.return_value = restaurant_review
 
+        expected_response = SuccessResponse(
+            data={"message": "Review added successfully", "review": restaurant_review}
+        )
+
         response = client.post(
             "/reviews/add-review",
             json=restaurant_review.json(),
@@ -69,8 +74,8 @@ def test_add_review(mock_controller, mock_database):
             headers={"Content-Type": "application/json"},
         )
 
-        assert response.status_code == 200
-        assert response.json() == restaurant_review.dict()
+        assert response.status_code == status.HTTP_201_CREATED
+        assert response.json() == expected_response.dict()
 
 
 def test_fetch_reviews(mock_controller, mock_database):
@@ -94,7 +99,11 @@ def test_fetch_reviews(mock_controller, mock_database):
         mock_controller_instance = mock_controller.return_value
         mock_controller_instance.fetch_reviews.return_value = [restaurant_review]
 
+        expected_response = ReviewsListResponse(
+            data=[{"restaurant": restaurant_data, "review": review_data}]
+        )
+
         response = client.get("/reviews/fetch-reviews")
 
-        assert response.status_code == 200
-        assert response.json() == [restaurant_review.dict()]
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() == expected_response.dict()

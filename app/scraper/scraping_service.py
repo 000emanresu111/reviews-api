@@ -5,17 +5,14 @@ from typing import List
 from fastapi import HTTPException
 from fastapi.logger import logger as fastapi_logger
 from selenium import webdriver
-from selenium.common.exceptions import (NoSuchAttributeException,
-                                        NoSuchElementException)
+from selenium.common.exceptions import NoSuchAttributeException, NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 
 from app.models.schemas import RestaurantInfo, RestaurantReview
-from app.scraper.scraping_utils import (get_normalized_rating,
-                                        scrape_review_element)
-from app.utils.exceptions import (RestaurantNotFoundError,
-                                  ReviewsNotFoundWarning)
+from app.scraper.scraping_utils import get_normalized_rating, scrape_review_element
+from app.utils.exceptions import RestaurantNotFoundError, ReviewsNotFoundWarning
 
 WEBDRIVER_PATH = which("chromedriver")
 
@@ -38,9 +35,9 @@ def scrape_justeat_reviews(
     service = Service(WEBDRIVER_PATH)
 
     chrome_options = Options()
-    chrome_options.add_argument('--headless=new')
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_argument("--headless=new")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
 
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
@@ -64,21 +61,21 @@ def scrape_justeat_reviews(
             By.CSS_SELECTOR, ".RatingMultiStarVariant_c-rating-mask_1c0Q3"
         )
     except NoSuchElementException:
-        error_message = f"There are still no reviews for this restaurant"
+        error_message = f"There are still no reviews for restaurant '{restaurant_name}'"
         fastapi_logger.error(error_message)
         raise ReviewsNotFoundWarning(error_message)
 
     try:
-        restaurant_rating_percentage_style = restaurant_rating_percentage_element.get_attribute("style")
+        restaurant_rating_percentage_style = (
+            restaurant_rating_percentage_element.get_attribute("style")
+        )
     except NoSuchAttributeException as e:
         raise HTTPException(status_code=404, detail=str(e))
-        
 
     percentage = float(
-            restaurant_rating_percentage_style.split(":")[-1].strip().replace("%;", "")
-        )
+        restaurant_rating_percentage_style.split(":")[-1].strip().replace("%;", "")
+    )
     restaurant_normalized_rating = get_normalized_rating(percentage)
-
 
     restaurant_info = RestaurantInfo(
         restaurant_name=url.split("/")[-2],
@@ -107,9 +104,7 @@ def scrape_justeat_reviews(
             RestaurantReview(restaurant=restaurant_info, review=review)
             for review in reviews
         ]
-    # except Exception as e:
-    #     error_message = f"An error occurred during scraping: {str(e)}"
-    #     fastapi_logger.error(error_message)
-    #     raise HTTPException(status_code=500, detail=error_message)
     except (RestaurantNotFoundError, ReviewsNotFoundWarning) as custom_exception:
-        raise HTTPException(status_code=custom_exception.status_code, detail=custom_exception.detail)
+        raise HTTPException(
+            status_code=custom_exception.status_code, detail=custom_exception.detail
+        )
