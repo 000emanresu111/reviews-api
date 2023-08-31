@@ -10,7 +10,7 @@ $ git clone https://github.com/000emanresu111/reviews-api.git
 ```
 ### 2) Navigate into the folder
 ```bash
-$ cd review-api
+$ cd reviews-api
 ```
 ### 3) Install deps with Poetry
 
