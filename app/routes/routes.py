@@ -19,12 +19,18 @@ def get_controller(database: Database = Depends(get_database)):
     return ReviewController(database)
 
 
-@router.get("/")
+@router.get("/", summary="Health Check", description="Check the API health status.")
 async def root():
     return {"status": "OK"}
 
 
-@router.post("/reviews/add-review", response_model=SuccessResponse, status_code=201)
+@router.post(
+    "/reviews/add-review",
+    response_model=SuccessResponse,
+    status_code=201,
+    summary="Add a Review",
+    description="Add a new review for a restaurant.",
+)
 async def add_review(
     review: RestaurantReview, controller: ReviewController = Depends(get_controller)
 ):
@@ -32,7 +38,7 @@ async def add_review(
         controller.add_review(review)
         response_data = {
             "message": "Review added successfully",
-            "restaurant_review": review
+            "restaurant_review": review,
         }
         return SuccessResponse(data=response_data)
     except Exception as e:
@@ -43,7 +49,11 @@ async def add_review(
 
 
 @router.get(
-    "/reviews/fetch-reviews", response_model=ReviewsListResponse, status_code=200
+    "/reviews/fetch-reviews",
+    response_model=ReviewsListResponse,
+    status_code=200,
+    summary="Fetch Reviews",
+    description="Fetch a list of all restaurant reviews.",
 )
 async def fetch_reviews(controller: ReviewController = Depends(get_controller)):
     try:
@@ -57,7 +67,11 @@ async def fetch_reviews(controller: ReviewController = Depends(get_controller)):
 
 
 @router.get(
-    "/scrape-justeat-reviews", response_model=ScrapeReviewsResponse, status_code=200
+    "/scrape-justeat-reviews",
+    response_model=ScrapeReviewsResponse,
+    status_code=200,
+    summary="Scrape JustEat Reviews",
+    description="Scrape reviews for a restaurant from JustEat.",
 )
 async def scrape_justeat_reviews_endpoint(restaurant_name: str):
     try:

@@ -24,6 +24,7 @@ class DatabaseConnection:
         self.db = self.client[DatabaseSettings.MONGODB_NAME]
         self.collection: Collection = self.db[DatabaseSettings.COLLECTION_NAME]
 
+
 class Database:
     def __init__(self, connection: DatabaseConnection):
         self.connection = connection
