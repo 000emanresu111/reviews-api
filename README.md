@@ -1,8 +1,65 @@
 # reviews-api
+- The reviews-api app is a [FastAPI](https://fastapi.tiangolo.com)-based backend web service centred on Pydantic validation.
+- It provides endpoints to manage and fetch restaurant reviews, as well as scraping reviews from a website.
+- Custom error handling and logging are also provided.
+- The chosen formatter is [black](https://github.com/psf/black) , while the chosen linter is [flake8](https://pypi.org/project/flake8/) .
 
-[FastAPI](https://fastapi.tiangolo.com)-based backend web service centred on Pydantic validation.
-It provides endpoints to manage and fetch restaurant reviews, as well as scraping reviews from a website.
-## Project Structure
+### 1) Clone the Repository
+```bash
+$ git clone https://github.com/000emanresu111/py-backend-app.git
+```
+### 2) Navigate into the folder
+```bash
+$ cd review-api
+```
+### 3) Install deps with Poetry
+
+Ensure you have [Poetry](https://python-poetry.org) installed.
+
+```bash
+$ poetry install # or "make install"
+```
+
+### 4) Start the app
+
+#### 4.1) Locally
+```bash
+$ poetry run python main.py
+```
+This will run both the backend server on port 8086 and the MongoDB instance on port 27017.
+
+```bash
+2023-08-31 10:23:55,015 - fastapi - INFO - Connecting to MongoDB...
+2023-08-31 10:23:55,019 - fastapi - INFO - Creating collection index...
+2023-08-31 10:23:55,025 - fastapi - INFO - Starting server...
+2023-08-31 10:23:55,163 - uvicorn.error - INFO - Started server process [25648]
+2023-08-31 10:23:55,163 - uvicorn.error - INFO - Waiting for application startup.
+2023-08-31 10:23:55,164 - uvicorn.error - INFO - Application startup complete.
+2023-08-31 10:23:55,166 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8086 (Press CTRL+C to quit)
+```
+
+#### 4.2) Using Docker
+```bash
+$ docker compose build
+$ docker compose up
+```
+
+### 5) Run tests
+```bash
+$ pytest -vv
+```
+
+### 6) Scraping
+If you want to test the scraping service, you need to have Chrome and ChromeDriver installed on your machine.
+You can choose the latest version from [here](https://googlechromelabs.github.io/chrome-for-testing/#stable) based on your Operating System.
+Alternatively, you can build and run the Dockerfile, which automatically downloads and install the latest version of Chrome and ChromeDriver.
+
+## API endpoints documentation and usage
+You may perform requests using a tool such as Postman or cURL, or alternatevely you can use the Swagger UI at http://localhost:8086/doc.
+
+## Project description
+
+### Project Structure
 
 The project is organized as follows:
 
@@ -21,24 +78,24 @@ The project is organized as follows:
 - `pyproject.toml`: Poetry project configuration.
 - `README.md`: Project documentation.
 
-## Setup
-
-1. Clone the repository: `git clone https://github.com/your-username/reviews-api.git`
-2. Navigate to the project directory: `cd reviews-api`
-3. Install dependencies: `poetry install`
-4. Run the application: `poetry run uvicorn main:app --host 0.0.0.0 --port 8000`
-
-## Run tests
-```bash
-$ pytest -vv
-```
-## Endpoints
+### Endpoints
 
 - `/`: Root endpoint to check the API status.
 - `/reviews/add-review`: POST endpoint to add a new restaurant review.
 - `/reviews/fetch-reviews`: GET endpoint to fetch all restaurant reviews.
 - `/scrape-justeat-reviews`: GET endpoint to scrape reviews from a specific restaurant.
 
-## Code formatting
+### System Architecture
+The Reviews API app backend is implemented using Python, FastAPI and MongoDB.
+The backend communicates with a MongoDB database for storing reviews information. 
+The server exposes a RESTful API that the client can interact with to perform various operations.
 
-This project uses [black](https://github.com/psf/black) code formatter.
+### Features description
+- Add a review:
+Users can add a review by providing some information such as the review text, sentiment, rating, etc. The review is then stored in the db.
+
+- Fetch reviews:
+Users can fetch all reviews from the db. The reviews are returned in a paginated format.
+
+- Scraping:
+Users can scrape reviews from a specific restaurant on JustEat. The scraping process is performed asynchronously using Selenium and ChromeDriver.
