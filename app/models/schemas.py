@@ -26,7 +26,7 @@ class RestaurantInfo(BaseModel):
     )
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {"restaurant_name": "Delicious Eats", "restaurant_rating": 4.7}
         }
 
@@ -58,7 +58,7 @@ class ReviewInfo(BaseModel):
     )
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "review_date": "01/01/2023 12:00:00",
                 "review_reviewer": "John Doe",

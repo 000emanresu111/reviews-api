@@ -39,4 +39,4 @@ if __name__ == "__main__":
     database.create_index([("restaurant_name", 1)])
 
     fastapi_logger.info("Starting server...")
-    uvicorn.run(app, host="127.0.0.1", port=8086, log_config="logging_config.yaml")
+    uvicorn.run("main:app", host="0.0.0.0", port=8086, log_config="logging_config.yaml")
