@@ -20,7 +20,7 @@ def get_controller(database: Database = Depends(get_database)):
 
 
 @router.get("/", summary="Health Check", description="Check the API health status.")
-async def root():
+def root():
     return {"status": "OK"}
 
 
@@ -31,7 +31,7 @@ async def root():
     summary="Add a Review",
     description="Add a new review for a restaurant.",
 )
-async def add_review(
+def add_review(
     review: RestaurantReview, controller: ReviewController = Depends(get_controller)
 ):
     try:
@@ -55,7 +55,7 @@ async def add_review(
     summary="Fetch Reviews",
     description="Fetch a list of all restaurant reviews.",
 )
-async def fetch_reviews(controller: ReviewController = Depends(get_controller)):
+def fetch_reviews(controller: ReviewController = Depends(get_controller)):
     try:
         reviews = controller.fetch_reviews()
         return ReviewsListResponse(data=reviews)
@@ -73,7 +73,7 @@ async def fetch_reviews(controller: ReviewController = Depends(get_controller)):
     summary="Scrape JustEat Reviews",
     description="Scrape reviews for a restaurant from JustEat.",
 )
-async def scrape_justeat_reviews_endpoint(restaurant_name: str):
+def scrape_justeat_reviews_endpoint(restaurant_name: str):
     try:
         scraped_reviews = scrape_justeat_reviews(restaurant_name)
         return ScrapeReviewsResponse(
