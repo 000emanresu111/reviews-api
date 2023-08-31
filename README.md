@@ -6,7 +6,7 @@
 
 ### 1) Clone the Repository
 ```bash
-$ git clone https://github.com/000emanresu111/py-backend-app.git
+$ git clone https://github.com/000emanresu111/reviews-api.git
 ```
 ### 2) Navigate into the folder
 ```bash
