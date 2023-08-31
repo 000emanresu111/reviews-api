@@ -149,7 +149,7 @@ Users can add a review by providing some information such as the review text, se
 Users can fetch all reviews from the db. The reviews are returned in a paginated format.
 
 - Scraping:
-Users can scrape reviews from a specific restaurant on JustEat. The scraping process is performed asynchronously using Selenium and ChromeDriver.
+Users can scrape reviews from a specific restaurant on JustEat. The scraping process is performed using Selenium and ChromeDriver.
 
 ## API endpoints documentation
 You may perform requests using a tool such as Postman or cURL, or alternatevely you can use the Swagger UI at http://localhost:8086/doc.
